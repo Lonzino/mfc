@@ -1,0 +1,67 @@
+#include "pch.h"
+#include "framework.h"
+#include "ListTest2.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+
+
+// 유일한 애플리케이션 개체입니다.
+
+CWinApp theApp;
+
+using namespace std;
+
+struct Point3D {
+    int x, y;
+    Point3D() {}
+    Point3D(int x0, int y0) { x = x0; y = y0; }
+};
+
+int main()
+{
+    int nRetCode = 0;
+
+    HMODULE hModule = ::GetModuleHandle(nullptr);
+
+    if (hModule != nullptr)
+    {
+        // MFC를 초기화합니다. 초기화하지 못한 경우 오류를 인쇄합니다.
+        if (!AfxWinInit(hModule, nullptr, ::GetCommandLine(), 0))
+        {
+            // TODO: 여기에 애플리케이션 동작을 코딩합니다.
+            wprintf(L"심각한 오류: MFC 초기화 실패\n");
+            nRetCode = 1;
+        }
+        else
+        {
+            // TODO: 여기에 애플리케이션 동작을 코딩합니다.
+            _tsetlocale(LC_ALL, _T(""));
+            CList<Point3D, Point3D&> list;
+
+            for (int i = 0; i < 10; i++) {
+                Point3D _point3D(i);
+                list.AddTail(_point3D);
+            }
+            POSITION pos = list.GetHeadPosition();
+            while (pos != NULL) {
+                Point3D pt = list.GetNext(pos);
+                _tprintf(_T("[1부터 10사이의 정수 입력]\n"));
+                _tscanf_s(_T("%d"), &pt.y);
+                list.RemoveAt(pos);
+                while (pos != NULL) {
+                    _tprintf(_T("%d"), pt.x);
+                }
+            }
+        }
+    }
+    else
+    {
+        // TODO: 오류 코드를 필요에 따라 수정합니다.
+        wprintf(L"심각한 오류: GetModuleHandle 실패\n");
+        nRetCode = 1;
+    }
+
+    return nRetCode;
+}
